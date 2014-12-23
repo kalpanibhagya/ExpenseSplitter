@@ -38,7 +38,9 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'ruby-mysql', '~> 2.9.13'
+
+gem 'mysql2', '~> 0.3.13'
+
 gem 'devise', '~> 3.0.0.rc'
 
 
