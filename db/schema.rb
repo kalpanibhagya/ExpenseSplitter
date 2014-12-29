@@ -11,12 +11,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141225145946) do
+ActiveRecord::Schema.define(version: 20141229114921) do
+
+  create_table "debts", force: true do |t|
+    t.integer  "spender"
+    t.integer  "debtor"
+    t.decimal  "amount",     precision: 10, scale: 0
+    t.string   "currency"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "debts", ["debtor"], name: "index_debts_on_debtor", using: :btree
+  add_index "debts", ["spender"], name: "index_debts_on_spender", using: :btree
 
   create_table "events", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.datetime "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+  end
+
+  create_table "friendships", force: true do |t|
+    t.integer  "user"
+    t.integer  "friend"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_profiles", force: true do |t|
+    t.string   "name"
+    t.integer  "friend_count"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
