@@ -1,0 +1,9 @@
+<h2>search</h2>
+
+<div id="results">
+  <%= if (@results != nil) 
+        
+	 render :partial => 'user' , :collection => @results
+
+      end %>
+</div>

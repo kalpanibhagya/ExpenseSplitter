@@ -1,0 +1,18 @@
+
+<h2>Manage Friends</h2>
+
+<%= link_to 'Back', :back %>
+
+<h2>Friends</h2>
+<% @logged_user.friendships.each do |friendship| %>
+  <%= friendship.friend.email %>
+  <%= link_to "Remove", friendship, :method => :delete %><br/>
+<% end %>
+
+<h2>Add new friends</h2>
+<% @new_friends.each do |user| %>
+  <%= user.email %>
+  <%= link_to "Add", friendships_path(:friend_id => user), :method => :post %><br/>
+<% end %>
+
+

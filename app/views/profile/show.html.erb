@@ -1,0 +1,20 @@
+<h1>View profile</h1>
+
+<% if user_signed_in? %>
+  <div>Signed in as... <%= @user.email %></div>
+<% end %>
+
+
+  <%= link_to('Manage Friends', profile_all_path)  %>  
+  
+  <br/>
+  
+  <%= link_to('Add Event', new_event_path)  %>  
+
+
+
+<% if user_signed_in? %>
+  <li>
+  <%= link_to('Sign out', destroy_user_session_path, :method => :get) %>        
+  </li>
+<% end %>

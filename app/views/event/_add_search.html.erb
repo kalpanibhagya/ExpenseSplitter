@@ -1,0 +1,4 @@
+<p>
+<%= user.first_name + ' ' +user.last_name + ' (' + user.email + ')'%>
+	<%= link_to "Add as participant",event_new_participant_path(user), :remote => true %>
+</p>

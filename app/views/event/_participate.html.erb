@@ -1,0 +1,9 @@
+<%= fields_for "event[participate_attributes][]",participate do |participate_form| %>
+    <tr>
+	    <%= participate_form.hidden_field :user_id, :value => participate.user.id%>
+    	<td><%= participate_form.label participate.user.name %></td>
+    	<td><%= participate_form.text_field :amount %></td>
+    	<td><%= participate_form.text_field :portion %></td>
+    	<td><%= link_to 'Remove', '#', :onclick => "$(this).parents('tr').remove()" %></td>
+    </tr>
+<% end %>
