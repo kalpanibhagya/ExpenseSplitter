@@ -11,49 +11,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141229114921) do
-
-  create_table "debts", force: true do |t|
-    t.integer  "spender"
-    t.integer  "debtor"
-    t.decimal  "amount",     precision: 10, scale: 0
-    t.string   "currency"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "debts", ["debtor"], name: "index_debts_on_debtor", using: :btree
-  add_index "debts", ["spender"], name: "index_debts_on_spender", using: :btree
+ActiveRecord::Schema.define(version: 20150131200439) do
 
   create_table "events", force: true do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id"
   end
 
   create_table "friendships", force: true do |t|
-    t.integer  "user"
-    t.integer  "friend"
+    t.integer  "user_id"
+    t.integer  "friend_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "user_profiles", force: true do |t|
-    t.string   "name"
-    t.integer  "friend_count"
+  create_table "participates", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "event_id"
+    t.decimal  "amount"
+    t.decimal  "portion"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id"
+  end
+
+  add_index "participates", ["event_id"], name: "index_participates_on_event_id"
+  add_index "participates", ["user_id"], name: "index_participates_on_user_id"
+
+  create_table "transactions", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
-    t.string   "reset_password_sent_at"
+    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",          default: 0
     t.datetime "current_sign_in_at"
@@ -62,9 +57,11 @@ ActiveRecord::Schema.define(version: 20141229114921) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end
