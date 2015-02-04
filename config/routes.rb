@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get "/event/new_participant"
   post 'event/:id/transaction_settle/:transaction_id', :to => 'event#transaction_settle', :as => 'transaction_settle'
   get 'event/:id/transaction_remind/:transaction_id', :to => 'event#transaction_remind', :as => 'transaction_remind'
+  get 'profile/notification_read/:notification_id', :to => 'profile#notification_read', :as => 'notification_read'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

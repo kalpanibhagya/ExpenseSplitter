@@ -40,20 +40,26 @@ class EventController < ApplicationController
     @event = Event.includes(:participates, :transactions).find(params[:id])
   end
 
-def transaction_settle
-  transaction = Transaction.find(params[:transaction_id])
-  transaction.settle = true
-  transaction.save
+  def transaction_settle
+    transaction = Transaction.find(params[:transaction_id])
+    transaction.settle = true
+    transaction.save
 
-  # TODO save to notification
+    message = "I settled your payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
+    link = "event/#{transaction.event.id}"
+    Notification.add_notification(transaction.receiver,transaction.sender,message,link)
 
-  redirect_to event_path(params[:id])
-end
+    flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"
+
+    redirect_to event_path(params[:id])
+  end
 
 def transaction_remind
   transaction = Transaction.find(params[:transaction_id])
- 
-  # TODO save to notification
+
+  message = "Please settle my payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
+  link = "event/#{transaction.event.id}"
+  Notification.add_notification(transaction.sender,transaction.receiver,message,link)
 
   flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"
 
@@ -61,9 +67,9 @@ def transaction_remind
 end
 
 
-  def new_participant
-    @participant = Participate.new
-    @participant.user = User.find(params[:format])
+def new_participant
+  @participant = Participate.new
+  @participant.user = User.find(params[:format])
     # puts 'new_participant called'
     # puts participant.inspect
   end

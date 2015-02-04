@@ -1,0 +1,12 @@
+	<p>
+	<% if (notification.sender != nil)  %>
+	<%= "#{notification.sender.name} : "  %>
+	<% end  %>
+		<%= notification.message %>
+	<% if (notification.link != nil)  %>
+	 <%= link_to('Link', root_path + notification.link ) %>
+	<% end  %>	
+	<%= link_to('Dismiss', notification_read_path(:notification_id => notification.id) ) %>
+
+	</p>
+	
