@@ -1,1 +1,31 @@
-<h2>Show Event <%= @event.id %></h2>
+<h2><%= @event.name %></h2>
+
+<p><%= @event.description %></p>
+
+
+<% if (@event.transactions != nil && @event.transactions.length > 0) %>
+<h2>Transactions</h2>
+<table >
+	<tr>
+		<td>Payer</td>
+		<td>Payee</td>
+		<td>Amount</td>
+		<td>Action</td>
+	</tr>
+	<%= render :partial =>  'event/transaction', :collection =>  @event.transactions  %>
+	<% end %>
+</table>
+
+
+<% if (@event.participates != nil && @event.participates.length > 0) %>
+<h2>Participants</h2>
+<table>
+	<tr>
+		<td>Person</td>
+		<td>Amount</td>
+		<td>Portion</td>
+	</tr>
+	<%= render :partial =>  'event/participate_view', :collection =>  @event.participates  %>
+</table>
+<% end %>
+

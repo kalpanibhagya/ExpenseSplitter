@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get "/profile/all"
   get "/event/search_friend"
   get "/event/new_participant"
+  post 'event/:id/transaction_settle/:transaction_id', :to => 'event#transaction_settle', :as => 'transaction_settle'
+  get 'event/:id/transaction_remind/:transaction_id', :to => 'event#transaction_remind', :as => 'transaction_remind'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -23,7 +25,9 @@ Rails.application.routes.draw do
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
-  resources :event
+  resources :event do 
+    #get ':aa/with_user'
+  end
   resources :profile, only: [:show, :index]
   resources :friendships
 

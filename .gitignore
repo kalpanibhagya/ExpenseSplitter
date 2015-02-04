@@ -14,4 +14,14 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore binary
 /bin
+
+# Ignore other files
+.directory
+.project
+dir
+typescript
+
+

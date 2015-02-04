@@ -1,4 +1,4 @@
-<h1>View profile</h1>
+<h2>View profile</h2>
 
 <% if user_signed_in? %>
   <div>Signed in as... <%= @user.email %></div>
@@ -9,6 +9,10 @@
   
   <br/>
   
+<%= render :partial => '/event/event_sections' %> 
+
+  <br/>
+
   <%= link_to('Add Event', new_event_path)  %>  
 
 

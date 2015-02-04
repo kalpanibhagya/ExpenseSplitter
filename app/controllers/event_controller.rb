@@ -1,7 +1,19 @@
 class EventController < ApplicationController 
+  def index
+    check_user
+
+    user_id = current_user.id
+
+    @debts =  Event.joins(:transactions).where('transactions.sender_id = ? AND transactions.settle= ?',user_id,false).order(created_at: :desc).group('event_id')
+    @spents =  Event.joins(:transactions).where('transactions.receiver_id = ? AND transactions.settle= ?',user_id,false).order(created_at: :desc).group('event_id')
+    @settlements =  Event.joins(:transactions).where('(transactions.sender_id = ? OR transactions.receiver_id = ?) AND transactions.settle= ?',user_id,user_id,true).order(created_at: :desc).group('event_id')
+
+  end
 
   def new
-  	@event = Event.new
+    check_user
+
+    @event = Event.new
     @user = current_user
     @event.participates = Array.new
 
@@ -12,27 +24,42 @@ class EventController < ApplicationController
   end
 
   def create
+    check_user
     @event = Event.new(event_params)
     if @event.save
-     create_transactions(@event)
-     flash[:notice] = "Successfully created event."
-     redirect_to event_path(@event.id)
-   else
-     render :action => 'new'
-   end
- end
-
-  # def create
-  #   @event = Event.find(18)
-  #   create_transactions(@event)
-
-  #   redirect_to event_path(@event.id)
-  # end
-
+      create_transactions(@event)
+      flash[:notice] = "Successfully created event."
+      redirect_to event_path(@event.id)
+    else
+      render :action => 'new'
+    end
+  end
 
   def show
-  	@event = Event.find(params[:id])
+    check_user
+    @event = Event.includes(:participates, :transactions).find(params[:id])
   end
+
+def transaction_settle
+  transaction = Transaction.find(params[:transaction_id])
+  transaction.settle = true
+  transaction.save
+
+  # TODO save to notification
+
+  redirect_to event_path(params[:id])
+end
+
+def transaction_remind
+  transaction = Transaction.find(params[:transaction_id])
+ 
+  # TODO save to notification
+
+  flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"
+
+  redirect_to event_path(params[:id])
+end
+
 
   def new_participant
     @participant = Participate.new
@@ -53,31 +80,31 @@ class EventController < ApplicationController
       total_amount = 0.0;
       total_portion = 0.0;
       event.participates.each do |participate|
-        total_amount = total_amount + participate.amount
-        total_portion = total_portion + participate.portion
-      end
+       total_amount = total_amount + participate.amount
+       total_portion = total_portion + participate.portion
+     end
 
-      unit_portion_amount = total_amount / total_portion
+     unit_portion_amount = total_amount / total_portion
 
       # init TransactionCalc 
       calc_list = Array.new
       event.participates.each do |participate|
-        calc = TransactionCalc.new
-        calc.user = participate.user
-        calc.portion = participate.portion * unit_portion_amount
-        calc.put = participate.amount
-        calc.pay = calc.portion - calc.put
+       calc = TransactionCalc.new
+       calc.user = participate.user
+       calc.portion = participate.portion * unit_portion_amount
+       calc.put = participate.amount
+       calc.pay = calc.portion - calc.put
 
-        calc_list.push(calc)
-      end
+       calc_list.push(calc)
+     end
 
       # init Transaction List
       transaction_list = Array.new
       all_zero = false
       interate = 0;
       while(!all_zero) do
-        all_zero = true
-        calc_list.each do |first|
+       all_zero = true
+       calc_list.each do |first|
           #TODO make continue if first.pay = 0 (already stable)
 
           calc_list.each do |second|
@@ -87,11 +114,12 @@ class EventController < ApplicationController
             second_pay = second.pay
             sum = first_pay + second_pay
             if(first.user != second.user && first_pay > 0 && second_pay < 0)
-              transac = Transaction.new
-              transac.event = event
-              transac.sender = first.user
-              transac.receiver = second.user
-              if(sum >= 0 )
+             transac = Transaction.new
+             transac.event = event
+             transac.sender = first.user
+             transac.receiver = second.user
+             transac.settle = false
+             if(sum >= 0 )
                 # first => second : second.pay (first pays second an {second.pay} amount)
                 puts "#{first.user.first_name} pays #{second.user.first_name} amount #{ second.pay.abs }"
                 transac.amount = second.pay.abs
@@ -124,11 +152,17 @@ class EventController < ApplicationController
 
     end
   end
-  
-  
+
+  def check_user
+    @user = current_user
+    if (@user == nil)
+      flash[:notice] = "Please Sign In to access"
+      redirect_to root_path
+    end
+  end
+
   def event_params
     params.require(:event).permit(:name, :description, participate_attributes: [:user_id,:amount,:portion])
   end
-
 
 end
