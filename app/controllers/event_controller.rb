@@ -87,19 +87,27 @@ class EventController < ApplicationController
             second_pay = second.pay
             sum = first_pay + second_pay
             if(first.user != second.user && first_pay > 0 && second_pay < 0)
+              transac = Transaction.new
+              transac.event = event
+              transac.sender = first.user
+              transac.receiver = second.user
               if(sum >= 0 )
                 # first => second : second.pay (first pays second an {second.pay} amount)
-                puts "#{first.user.first_name} pays #{second.user.first_name} amount #{ second.pay }"
+                puts "#{first.user.first_name} pays #{second.user.first_name} amount #{ second.pay.abs }"
+                transac.amount = second.pay.abs
 
                 first.pay = sum
                 second.pay = 0
               else
                 # first => second : first.pay
-                puts "#{first.user.first_name} pays #{second.user.first_name} amount #{ first.pay }"
+                puts "#{first.user.first_name} pays #{second.user.first_name} amount #{ first.pay.abs }"
+                transac.amount = first.pay.abs
+
                 first.pay = 0
                 second.pay = sum
-
               end
+
+              transaction_list.push(transac)
 
             end
 
@@ -110,8 +118,9 @@ class EventController < ApplicationController
             all_zero = false
           end
         end
-
       end
+
+      Transaction.save_all(transaction_list)
 
     end
   end
