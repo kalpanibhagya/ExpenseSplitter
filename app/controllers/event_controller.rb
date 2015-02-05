@@ -46,7 +46,7 @@ class EventController < ApplicationController
     transaction.save
 
     message = "I settled your payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
-    link = "event/#{transaction.event.id}"
+    link = Notification.get_link(transaction.event) 
     Notification.add_notification(transaction.receiver,transaction.sender,message,link)
 
     flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"
@@ -58,7 +58,7 @@ def transaction_remind
   transaction = Transaction.find(params[:transaction_id])
 
   message = "Please settle my payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
-  link = "event/#{transaction.event.id}"
+  link = Notification.get_link(transaction.event) 
   Notification.add_notification(transaction.sender,transaction.receiver,message,link)
 
   flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"

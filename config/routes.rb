@@ -6,9 +6,9 @@ Rails.application.routes.draw do
   root :to => "profile#show"
 #match "/entrees/new/:id", :to => "entrees#new", :as => 'new_entrees'
 
-  get "/profile/all"
-  get "/event/search_friend"
-  get "/event/new_participant"
+  get '/profile/all'
+  get '/event/search_friend'
+  get '/event/new_participant'
   post 'event/:id/transaction_settle/:transaction_id', :to => 'event#transaction_settle', :as => 'transaction_settle'
   get 'event/:id/transaction_remind/:transaction_id', :to => 'event#transaction_remind', :as => 'transaction_remind'
   get 'profile/notification_read/:notification_id', :to => 'profile#notification_read', :as => 'notification_read'

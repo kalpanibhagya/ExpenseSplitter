@@ -7,8 +7,9 @@ class Transaction < ActiveRecord::Base
     ActiveRecord::Base.transaction do
       transactions.each do |transac|
         transac.save
+        notification = Notification.get_transaction_notification(transac)
+        notification.save
       end
     end
-
   end
 end
