@@ -8,9 +8,13 @@ Start
 Use following commands in your console
 
 cd 'project_path\ExpenseSplitter'
+
 bundle install
+
 rake db:migrate
+
 rake rails:update:bin
+
 rails server
 
 Goto Following url from web browser
