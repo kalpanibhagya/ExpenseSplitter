@@ -1,6 +1,6 @@
 class CreateTransactions < ActiveRecord::Migration
   def change
-    drop_table :transactions
+    drop_table :transactions if ActiveRecord::Base.connection.table_exists? :transactions
 
     create_table :transactions do |t|
       t.belongs_to :event, index: true

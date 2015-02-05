@@ -39,3 +39,4 @@ gem 'spring',        group: :development
 # gem 'debugger', group: [:development, :test]
 
 gem 'devise'
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
