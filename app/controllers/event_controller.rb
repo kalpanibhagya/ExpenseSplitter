@@ -111,10 +111,12 @@ def new_participant
       while(!all_zero) do
        all_zero = true
        calc_list.each do |first|
-          #TODO make continue if first.pay = 0 (already stable)
+          #make continue if first.pay = 0 (already stable)
+          next if (first.pay == 0)
 
           calc_list.each do |second|
-            #TODO make continue if second.pay = 0 (already stable)
+            #make continue if second.pay = 0 (already stable)
+            next if (second.pay == 0)
 
             first_pay = first.pay
             second_pay = second.pay
