@@ -21,6 +21,8 @@ class EventController < ApplicationController
     self_participate = Participate.new
     self_participate.user = @user
     @event.participates.push(self_participate)
+
+    @results = @user.friends
   end
 
   def create
@@ -31,6 +33,7 @@ class EventController < ApplicationController
       flash[:notice] = "Successfully created event."
       redirect_to event_path(@event.id)
     else
+      flash[:notice] = "Event creation error"
       render :action => 'new'
     end
   end
@@ -41,41 +44,56 @@ class EventController < ApplicationController
   end
 
   def transaction_settle
-    transaction = Transaction.find(params[:transaction_id])
-    transaction.settle = true
-    transaction.save
 
-    message = "I settled your payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
+    transaction = Transaction.find(params[:transaction_id])
+    # check for unauthorized access
+    if (transaction.receiver.id == current_user.id) 
+
+      transaction.settle = true
+      transaction.save
+
+      message = "I settled your payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
+      link = Notification.get_link(transaction.event) 
+      Notification.add_notification(transaction.receiver,transaction.sender,message,link)
+
+      flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"
+
+      redirect_to event_path(params[:id])
+    else
+      flash[:notice] = "You are not authorized to settle this transactoin"
+      redirect_to event_path(params[:id])
+    end
+  end
+
+  def transaction_remind
+    transaction = Transaction.find(params[:transaction_id])
+
+    message = "Please settle my payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
     link = Notification.get_link(transaction.event) 
-    Notification.add_notification(transaction.receiver,transaction.sender,message,link)
+    Notification.add_notification(transaction.sender,transaction.receiver,message,link)
 
     flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"
 
     redirect_to event_path(params[:id])
   end
 
-def transaction_remind
-  transaction = Transaction.find(params[:transaction_id])
 
-  message = "Please settle my payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
-  link = Notification.get_link(transaction.event) 
-  Notification.add_notification(transaction.sender,transaction.receiver,message,link)
-
-  flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"
-
-  redirect_to event_path(params[:id])
-end
-
-
-def new_participant
-  @participant = Participate.new
-  @participant.user = User.find(params[:format])
+  def new_participant
+    @participant = Participate.new
+    @participant.user = User.find(params[:format])
     # puts 'new_participant called'
     # puts participant.inspect
   end
 
   def search_friend
-    @results = User.search(params[:search])
+    @results = User.search(params[:search],params[:participant_ids])
+
+    if(@results == nil || @results.length == 0)
+      @results = current_user.friends
+    end
+
+    puts @results.inspect
+
     puts " Found results: #{ @results.length }"
   end
 
@@ -150,7 +168,8 @@ def new_participant
 
           end
 
-          if(all_zero && first.pay != 0.0)
+          # 0.0000 fix for amount with infinite digits. precision of 0.000
+          if(all_zero && first.pay >= 0.0001)
             all_zero = false
           end
         end

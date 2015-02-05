@@ -1,46 +1,45 @@
 <h2>Add new event</h2>
 <!-- search  -->
-<p>
+
+<h4>Add Participants</h4>
 <%= form_tag event_search_friend_path, :method => :get, :remote => true do %>
-  <p>
-    <%= text_field_tag :search, params[:search] %>
-    <%= submit_tag "Search", :name => nil %>
-  </p>
+<p>
+  <%= text_field_tag :search, params[:search] %>
+  <%= hidden_field_tag 'participant_ids', @user.id  %>
+  <%= submit_tag "Search", :name => nil %>
+</p>
 <% end %>
 <div id="results">
   <%= if (@results != nil) 
-        render :partial => 'add_search' , :collection => @results
-      end %>
-</div>
-</p>
-
-<%= form_for :event ,url: {action: "create"} do |f| %>
-<p>
-  <%= f.label :name %><br>
-  <%= f.text_field :name %>
-</p>
-
-<p>
-  <%= f.label :description %><br>
-  <%= f.text_area :description %>
-</p>
+    render :partial => 'add_search' , :collection => @results, as: :user
+    end %>
+  </div>
 
 
-  <%= f.label :participants %><br/>
-  <% #@event.participates.each do |participate|%>
-</p>
-  
-<table id="tbl_participants">
-<tr>
-	<td>Person</td>
-	<td>Amount</td>
-	<td>Portion</td>
-</tr>
+  <%= form_for :event ,url: {action: "create"} do |f| %>
+  <p>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </p>
 
-<%= render :partial => 'participate' , :collection => @event.participates %>
-</table>
+  <p>
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </p>
 
-<p>
+
+  <h3>Participants</h3>
+  <table id="tbl_participants">
+    <tr>
+     <td>Person</td>
+     <td>Amount</td>
+     <td>Portion</td>
+   </tr>
+
+   <%= render :partial => 'participate' , :collection => @event.participates %>
+ </table>
+
+ <p>
   <%= f.submit %>
 </p>
 <% end %>

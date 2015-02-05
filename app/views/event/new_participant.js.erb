@@ -1,1 +1,3 @@
 $('#tbl_participants').append("<%= escape_javascript(render('participate',:participate => @participant)) %>");
+var old = $('#participant_ids').val();
+$('#participant_ids').val(old + "," + "<%= escape_javascript(get_participant_id( @participant)) %>");
