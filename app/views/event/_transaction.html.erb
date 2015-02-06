@@ -6,7 +6,7 @@
 		<% if (transaction.settle) %>
 		Settled
 		<% elsif (transaction.sender.id == current_user.id)  %>
-		<%= link_to "Paid", transaction_remind_path(:id => transaction.event,:transaction_id => transaction.id), :method => :get, data: { confirm: "Are you sure you want to remind #{transaction.receiver.first_name} about the payment you did?" } %>
+		<%= link_to "Paid", transaction_remind_path(:id => transaction.event,:transaction_id => transaction.id), :method => :get, data: { confirm: "Are you sure you want to remind #{transaction.receiver.first_name} about the payment you did?" }%>
 		<% elsif (transaction.receiver.id == current_user.id)  %>
 		<%= link_to "Settle", transaction_settle_path(:id => transaction.event,:transaction_id => transaction.id), :method => :post, data: { confirm: "Are you sure you received an amount of #{format_amount(transaction.amount)} from #{transaction.sender.first_name}?" } %>
 

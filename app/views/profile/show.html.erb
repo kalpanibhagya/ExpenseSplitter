@@ -1,26 +1,22 @@
-<h2>View profile</h2>
+<h3>View profile</h3>
 
 <% if user_signed_in? %>
-<div>Signed in as... <%= @user.email %></div>
+<div>Welcome <%= @user.email %>
+<% if user_signed_in? %>
+	<%= link_to('Sign out', destroy_user_session_path, :method => :get) %>        
 <% end %>
-
+</div>
+<br/>
+<% end %>
 
 <% if(@notifications != nil && @notifications.length > 0) %>
 <h2>Notifications</h2>
 <%= render :partial => 'notification' , :collection => @notifications %>
 <% end %>
 
+<%= link_to('Add Event', new_event_path, {:class => "btn btn-primary"})  %>  
+<%= link_to('Manage Friends', profile_all_path, {:class => "btn btn-default"})  %>  
+
+
 <%= render :partial => '/event/event_sections' %> 
 <br/>
-
-
-
-<%= link_to('Manage Friends', profile_all_path)  %>  
-<br/>
-<%= link_to('Add Event', new_event_path)  %>  
-
-<% if user_signed_in? %>
-<li>
-	<%= link_to('Sign out', destroy_user_session_path, :method => :get) %>        
-</li>
-<% end %>

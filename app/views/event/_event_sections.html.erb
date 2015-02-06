@@ -1,22 +1,30 @@
-<% if(@debts != nil && @debts.length > 0)  %>
-<h2>Debts</h2>
-<ul>
-<%= render :partial => 'event/event' , :collection => @debts %>
-</ul>
-<% end  %>
+<div class="row">
+	<% if(@debts != nil && @debts.length > 0)  %>
+	<div class="col-md-4">
+	<h3>Debts</h3>
+	<ul>
+		<%= render :partial => 'event/event' , :collection => @debts %>
+	</ul>
+	</div>
+	<% end  %>
 
 
-<% if(@spents != nil && @spents.length > 0)  %>
-<h2>Spents</h2>
-<ul>
-<%= render :partial => 'event/event' , :collection => @spents %>
-</ul>
-<% end %>
+	<% if(@spents != nil && @spents.length > 0)  %>
+	<div class="col-md-4">
+	<h3>Spents</h3>
+	<ul>
+		<%= render :partial => 'event/event' , :collection => @spents %>
+	</ul>
+	</div>
+	<% end %>
 
-<% if(@settlements != nil && @settlements.length > 0)  %>
-<h2>Settlements</h2>
-<ul>
-<%= render :partial => 'event/event' , :collection => @settlements %>
-</ul>
-<% end %>
+	<% if(@settlements != nil && @settlements.length > 0)  %>
+	<div class="col-md-4">
+	<h3>Settlements</h3>
+	<ul>
+		<%= render :partial => 'event/event' , :collection => @settlements %>
+	</ul>
+	</div>
+	<% end %>
+</div>
 

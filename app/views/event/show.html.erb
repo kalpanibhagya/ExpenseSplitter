@@ -5,7 +5,7 @@
 
 <% if (@event.transactions != nil && @event.transactions.length > 0) %>
 <h2>Transactions</h2>
-<table >
+<table class="table table-stripes">
 	<tr>
 		<td>Payer</td>
 		<td>Payee</td>
@@ -19,7 +19,7 @@
 
 <% if (@event.participates != nil && @event.participates.length > 0) %>
 <h2>Participants</h2>
-<table>
+<table class="table table-stripes">
 	<tr>
 		<td>Person</td>
 		<td>Amount</td>

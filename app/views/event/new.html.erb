@@ -1,6 +1,7 @@
 <h2>Add new event</h2>
-<!-- search  -->
+<%= link_to 'Home', root_path, :class => "btn btn-default btn-sm"%>
 
+<!-- search  -->
 <h4>Add Participants</h4>
 <%= form_tag event_search_friend_path, :method => :get, :remote => true do %>
 <p>
@@ -18,7 +19,7 @@
 
   <%= form_for :event ,url: {action: "create"} do |f| %>
   <p>
-    <%= f.label :name %><br>
+    <%= f.label :name %><br>   
     <%= f.text_field :name %>
   </p>
 
@@ -27,9 +28,8 @@
     <%= f.text_area :description %>
   </p>
 
-
-  <h3>Participants</h3>
-  <table id="tbl_participants">
+  <%= f.label :participants %><br>
+  <table id="tbl_participants" >
     <tr>
      <td>Person</td>
      <td>Amount</td>
@@ -39,7 +39,7 @@
    <%= render :partial => 'participate' , :collection => @event.participates %>
  </table>
 
- <p>
-  <%= f.submit %>
-</p>
-<% end %>
+ <br/>
+ <%= f.submit :class => "btn btn-primary" %>
+
+ <% end %>

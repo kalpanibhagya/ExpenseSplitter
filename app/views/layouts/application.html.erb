@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ExpenseSplitter</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
+	<title>ExpenseSplitter</title>
+	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+	<%= csrf_meta_tags %>
 </head>
 <body>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
-<%= yield %>
+	<div class="container">
+		<div class="row"> 
+			<div class="col-md-8">
+				<p class="notice  alert-info" role="alert"><%= notice %></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+			<p class="alert" role="alert"><%= alert %></p>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<%= yield %>
+	</div>
 
 </body>
 </html>

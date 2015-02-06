@@ -56,7 +56,7 @@ class EventController < ApplicationController
       link = Notification.get_link(transaction.event) 
       Notification.add_notification(transaction.receiver,transaction.sender,message,link)
 
-      flash[:notice] = "Notificatin sent to #{transaction.sender.name}"
+      flash[:notice] = "Notification sent to #{transaction.sender.name}"
 
       redirect_to event_path(params[:id])
     else
@@ -72,7 +72,7 @@ class EventController < ApplicationController
     link = Notification.get_link(transaction.event) 
     Notification.add_notification(transaction.sender,transaction.receiver,message,link)
 
-    flash[:notice] = "Notificatin sent to #{transaction.receiver.name}"
+    flash[:notice] = "Notification sent to #{transaction.receiver.name}"
 
     redirect_to event_path(params[:id])
   end
