@@ -20,7 +20,8 @@ class Notification < ActiveRecord::Base
     notification = Notification.new
     notification.sender = transaction.receiver
     notification.receiver = transaction.sender
-    notification.message = "Pay me an amount of #{transaction.amount} for the event \"#{transaction.event.name}\""
+    formated_amount = format_amount(transaction.amount)
+    notification.message = "Pay me an amount of #{formated_amount} for the event \"#{transaction.event.name}\""
     notification.read = false
     notification.link = get_link(transaction.event)
     notification
@@ -32,5 +33,9 @@ class Notification < ActiveRecord::Base
     else
       link = nil
     end    
+  end
+
+  def self.format_amount(float)
+    sprintf("%05.2f", float)
   end
 end

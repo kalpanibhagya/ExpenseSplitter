@@ -52,7 +52,7 @@ class EventController < ApplicationController
       transaction.settle = true
       transaction.save
 
-      message = "I settled your payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
+      message = "I settled your payment of #{format_amount(transaction.amount)} to the event \"#{transaction.event.name}\""
       link = Notification.get_link(transaction.event) 
       Notification.add_notification(transaction.receiver,transaction.sender,message,link)
 
@@ -68,7 +68,7 @@ class EventController < ApplicationController
   def transaction_remind
     transaction = Transaction.find(params[:transaction_id])
 
-    message = "Please settle my payment of #{transaction.amount} to the event \"#{transaction.event.name}\""
+    message = "Please settle my payment of #{format_amount(transaction.amount)} to the event \"#{transaction.event.name}\""
     link = Notification.get_link(transaction.event) 
     Notification.add_notification(transaction.sender,transaction.receiver,message,link)
 
@@ -190,6 +190,10 @@ class EventController < ApplicationController
 
   def event_params
     params.require(:event).permit(:name, :description, participate_attributes: [:user_id,:amount,:portion])
+  end
+
+  def format_amount(float)
+    sprintf("%05.2f", float)
   end
 
 end
